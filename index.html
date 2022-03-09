@@ -1,0 +1,90 @@
+<div class="pagination">
+  <button id="prev">
+    prev
+  </button>
+  <div class="numbers">
+  </div>
+  <button id="next">
+    next
+  </button>
+</div>
+
+const next = document.getElementById('next')
+const prev = document.getElementById('prev')
+const numbers = document.querySelector('.numbers')
+
+const totalPageCount = 10
+const max = 2
+const pagesArray = []
+let currentPage = 1
+
+prev.addEventListener('click', _ => {
+	currentPage--
+  pagination()
+})
+
+next.addEventListener('click', _ => {
+	currentPage++
+  pagination()
+})
+
+for(let i = 1; i<= totalPageCount; i++){
+	pagesArray.push(i)
+}
+
+function createNumberButton(number){
+	const button = document.createElement('button')
+  
+  button.addEventListener('click', _ => {
+  	currentPage = number
+    pagination()
+  })
+  
+  button.id = `paginate-${number}`
+  button.innerText = number
+  numbers.appendChild(button)
+}
+
+function findActiveNumber(){
+	
+  if(document.querySelector('.numbers button.active')){
+  	document.querySelector('.numbers button.active').classList.remove('active')
+  }
+  
+	document.getElementById(`paginate-${currentPage}`).classList.add('active')
+}
+
+function pagination(){
+	
+  numbers.innerHTML = ''
+  
+	if(currentPage === 1){
+		prev.setAttribute('hidden', 'true')  	
+  }else{
+  	prev.removeAttribute('hidden')
+  }
+  
+  if(currentPage === pagesArray.length){
+		next.setAttribute('hidden', 'true')  	
+  }else{
+  	next.removeAttribute('hidden')
+  }
+  
+  for(let i = max; i>0; i--){
+    if(pagesArray[currentPage-i-1]){
+    		createNumberButton(pagesArray[currentPage-i-1])
+    }
+  }
+  
+  for(let i = 0; i<=max; i++){
+  	if(pagesArray[currentPage+i-1]){
+    	createNumberButton(pagesArray[currentPage+i-1])
+    }
+  }
+  
+	  findActiveNumber()
+
+  
+}
+
+pagination()
